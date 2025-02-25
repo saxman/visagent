@@ -1,0 +1,36 @@
+[project]
+name = "visagent"
+version = "0.1.0"
+description = "Visual Agent-based Modeling Framework"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+
+# pip dependencies
+# install with `pip install -e .`
+dependencies = [
+    "torch",
+    "numpy",
+    "matplotlib",
+    "scipy"
+]
+
+# optional pip dependencies
+# install with `pip install -e '.[dev]'`
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["visagent*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
