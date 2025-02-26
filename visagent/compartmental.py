@@ -50,14 +50,14 @@ class SEIRModel:
         Plots the SEIR model results.
         """
         plt.figure(figsize=(10, 6))
-        plt.plot(t, S, 'b', label='Susceptible')
-        plt.plot(t, E, 'y', label='Exposed')
-        plt.plot(t, I, 'r', label='Infectious')
-        plt.plot(t, R, 'g', label='Recovered')
-        
-        plt.xlabel('Days')
-        plt.ylabel('Population')
-        plt.title('SEIR Model Simulation')
+        plt.plot(t, S, "b", label="Susceptible")
+        plt.plot(t, E, "y", label="Exposed")
+        plt.plot(t, I, "r", label="Infectious")
+        plt.plot(t, R, "g", label="Recovered")
+
+        plt.xlabel("Days")
+        plt.ylabel("Population")
+        plt.title("SEIR Model Simulation")
         plt.legend()
         plt.grid()
         plt.show()
@@ -79,7 +79,7 @@ class SEIRTorchModel(nn.Module):
         self.sigma = sigma
         self.gamma = gamma
         self.S0, self.E0, self.I0, self.R0 = initial_conditions
-    
+
     def deriv(self, y):
         """Defines the differential equations for the SEIR model."""
         S, E, I, R = y
@@ -98,11 +98,11 @@ class SEIRTorchModel(nn.Module):
         t = torch.arange(0, days, dt, dtype=torch.float32).to(device)
         y = torch.tensor([self.S0, self.E0, self.I0, self.R0], dtype=torch.float32).to(device)
         results = [y.clone()]
-        
+
         for _ in t[1:]:
             y = y + self.deriv(y) * dt
             results.append(y.clone())
-        
+
         results = torch.stack(results).cpu().numpy()
         return t.cpu().numpy(), results[:, 0], results[:, 1], results[:, 2], results[:, 3]
 
@@ -111,14 +111,14 @@ class SEIRTorchModel(nn.Module):
         Plots the SEIR model results.
         """
         plt.figure(figsize=(10, 6))
-        plt.plot(t, S, 'b', label='Susceptible')
-        plt.plot(t, E, 'y', label='Exposed')
-        plt.plot(t, I, 'r', label='Infectious')
-        plt.plot(t, R, 'g', label='Recovered')
-        
-        plt.xlabel('Days')
-        plt.ylabel('Population')
-        plt.title('SEIR Model Simulation with PyTorch')
+        plt.plot(t, S, "b", label="Susceptible")
+        plt.plot(t, E, "y", label="Exposed")
+        plt.plot(t, I, "r", label="Infectious")
+        plt.plot(t, R, "g", label="Recovered")
+
+        plt.xlabel("Days")
+        plt.ylabel("Population")
+        plt.title("SEIR Model Simulation with PyTorch")
         plt.legend()
         plt.grid()
         plt.show()
