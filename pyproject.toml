@@ -12,7 +12,8 @@ dependencies = [
     "torch",
     "numpy",
     "matplotlib",
-    "scipy"
+    "scipy",
+    "tqdm"
 ]
 
 # optional pip dependencies
@@ -20,7 +21,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "ruff",
-    "pytest"
+    "pytest",
+    "ipykernel",
+    "ipywidgets"
 ]
 
 [build-system]

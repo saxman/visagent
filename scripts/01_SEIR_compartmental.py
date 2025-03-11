@@ -11,7 +11,7 @@ days = 160
 
 def run_standard_model():
     start = time.perf_counter()
-    model = SEIRTorchModel(population, beta, sigma, gamma, initial_conditions)
+    model = SEIRModel(population, beta, sigma, gamma, initial_conditions)
     t, S, E, I, R = model.run_simulation(160)
     end = time.perf_counter()
 

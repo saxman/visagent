@@ -3,9 +3,7 @@ import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
-
-# Ensure we're using GPU if available
-device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
+from visagent import utils
 
 
 class SEIRModel:
@@ -80,6 +78,9 @@ class SEIRTorchModel(nn.Module):
         self.gamma = gamma
         self.S0, self.E0, self.I0, self.R0 = initial_conditions
 
+        self.device = utils.get_pytorch_device()
+
+    @torch.no_grad
     def deriv(self, y):
         """Defines the differential equations for the SEIR model."""
         S, E, I, R = y
@@ -87,16 +88,17 @@ class SEIRTorchModel(nn.Module):
         dEdt = self.beta * S * I / self.N - self.sigma * E
         dIdt = self.sigma * E - self.gamma * I
         dRdt = self.gamma * I
-        return torch.tensor([dSdt, dEdt, dIdt, dRdt], dtype=torch.float32).to(device)
+        return torch.tensor([dSdt, dEdt, dIdt, dRdt], dtype=torch.float32, device=self.device)
 
+    @torch.no_grad
     def run_simulation(self, days, dt=1.0):
         """
         Runs the SEIR simulation.
         :param days: Number of days to simulate
         :return: Tuple of tensors (S, E, I, R)
         """
-        t = torch.arange(0, days, dt, dtype=torch.float32).to(device)
-        y = torch.tensor([self.S0, self.E0, self.I0, self.R0], dtype=torch.float32).to(device)
+        t = torch.arange(0, days, dt, dtype=torch.float32).to(self.device)
+        y = torch.tensor([self.S0, self.E0, self.I0, self.R0], dtype=torch.float32, device=self.device)
         results = [y.clone()]
 
         for _ in t[1:]:
@@ -118,7 +120,7 @@ class SEIRTorchModel(nn.Module):
 
         plt.xlabel("Days")
         plt.ylabel("Population")
-        plt.title("SEIR Model Simulation with PyTorch")
+        plt.title("SEIR Model Simulation")
         plt.legend()
         plt.grid()
         plt.show()
